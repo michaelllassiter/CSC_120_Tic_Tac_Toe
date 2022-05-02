@@ -1,28 +1,54 @@
 # Michael Lassiter
 # 2022SP.CSC.120.0003 
-# CSC 120 Lab 09
+# CSC 120 Lab 09, Part 1
+# April 24, 2022
 # Adjusted program after finding Joseph Parks' video
+# May 1, 2022
+# CSC 120 Lab 09, Part 2
 # board is a list of 3 lists, with each of these lists being a list containing
 # three single character elements.
 board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
 
 def main():
-	print()
-	# Call print_board() for test
-	print('print_board() unit test:')
+	# initialize values
+	player_id = 1
+	number_of_turns = 0
+	print('*************************************')
+	print('Shall we play a game of Tic-Tac-Toe?')
+	print('*************************************')
+	# loop until a win
+	while check_win(player_id) == False and number_of_turns < 9:
+		print_board()
+		print(f'Player {player_id}, make your mark.')
+		row = validate_entry(input('Enter value between 0 and 2: '))
+		col = validate_entry(input('Enter value between 0 and 2: '))
+		# loop until player selects empty spot
+		while check_mark(row, col) == False:
+			print('This space is not available. Please try again.')
+			row = validate_entry(input('Enter value between 0 and 2: '))
+			col = validate_entry(input('Enter value between 0 and 2: '))
+		place_mark(row, col, player_id)
+		number_of_turns = number_of_turns + 1
+		if check_win(player_id) == False and player_id == 1:
+			player_id = 2
+		elif check_win(player_id) == False and player_id == 2:
+			player_id = 1
 	print_board()
-	print()
-	# Call check_mark() for test
-	print('check_mark(1,1) test:')
-	print(check_mark(1, 1))
-	print()
-	# Call place_mark() for test
-	print('place_mark(1,1,1) test:')
-	place_mark(1,1,1)
-	print_board()
-	# Call check_win for test
-	print('check_win(1) test:')
-	print(check_win(1))
+	if check_win(player_id) == True:
+		print('*************************************')
+		print(f'Congratulations!  Player {player_id}, you win!')
+		print('*************************************')
+	else:
+		print('*************************************')
+		print('Game is a draw.  Good match players!')
+		print('*************************************')
+
+# This function tests entry
+def validate_entry(val):
+	while len(val) > 1 or val.isdigit() == False or int(val) < 0 or int(val) > 2:
+		print('Invalid entry. Please try again')
+		val = input('Enter value between 0 and 2: ')
+	return int(val)
 	
 # This function prints the board as a tic-tak-toe board
 def print_board():
@@ -47,7 +73,7 @@ def place_mark(row, col, player_id):
 	if player_id == 1:
 		board[row][col]='X'
 	if player_id == 2:
-		board[row][col]='Y'
+		board[row][col]='O'
 
 # This function does the following:
 # if player_id equals 1, the function checks if any row, column or diagonal
@@ -80,7 +106,8 @@ def check_win(player_id):
 	if [board[2][0], board[1][1], board[0][2]] == test_value:
 		result = True
 	return result
-	
+
+# This function 
 # Call the main function
 if __name__ == '__main__':
 	main()
